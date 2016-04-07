@@ -1,6 +1,9 @@
 
- [#if VIEW_MODE="search_kody_notify" || VIEW_MODE=""#]
+ <!-- action usual -->
  
+ <!-- table kodi_instances search -->
+ [#if VIEW_MODE="search_kodi_instances" || VIEW_MODE=""#]
+<!-- table zwave_devices search -->
 <div class="float-right">
 	<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#about">About&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span>
 	</button>
@@ -12,11 +15,11 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Kodi Notify</h4>
+				<h4 class="modal-title">Kodi Notifier</h4>
 			</div>
 			<div class="modal-body">
-				<p> Модуль Kodi Notify.<br>
-				Обсуждение модуля <a href="http://majordomo.smartliving.ru/forum/viewtopic.php?f=5" target="_blank">здесь</a>.<br>
+				<p> Модуль Kodi Notifier.<br>
+				Обсуждение модуля <a href="http://majordomo.smartliving.ru/forum/viewtopic.php?f=5&t=2893" target="_blank">здесь</a>.<br>
 				</p>
                 <hr size="1">
 				<div class="float-right">
@@ -55,34 +58,28 @@
 	</div>
 </div>
 
-<!-- table zwave_devices search -->
-<div id='api_settings'>
-<a href="https://kodi.tv/" target="_blank">Kodi Notify</a>
+<div>
+ <a href="https://kodi.tv/" target="_blank">Kodi</a> Notifier<br><br>
+ <a class="btn btn-default" href="#" onClick="$('#api_settings').toggle();return false;"><#LANG_SETUP#></a>   
+ <a href="?test=1" class="btn btn-default">Test notify</a>
+</div>
+
+<div style="display:none" id='api_settings'>
 &nbsp;
 <form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
 <fieldset>
 <div class="form-group">
- <label class="control-label"> IP: (*) </label>
- <div class="col-lg-6"><input type="text" class="form-control" name="ip" value="[#IP#]" class="input"></div>
+ <label class="control-label"[#if ERR_TITLE#] style="color:red;font-weight:bold"[#endif#]>
+ Title:
+ </label>
+ <div class="col-lg-6"><input type="text" name="title" value="[#TITLE#]" class="form-control"></div>
 </div>
 <div class="form-group">
- <label class="control-label"> Port: (*) </label>
- <div class="col-lg-6"><input type="text" class="form-control" name="port" value="[#PORT#]" class="input"></div>
+ <label class="control-label"[#if ERR_IMAGE_PATH#] style="color:red;font-weight:bold"[#endif#]>
+ Image URL:
+ </label>
+ <div class="col-lg-6"><input type="text" name="image_path" value="[#IMAGE_PATH#]" class="form-control"></div>
 </div>
-<div class="form-group">
- <label class="control-label"> Login:</label>
- <div class="col-lg-6"><input type="text" class="form-control" name="login" value="[#LOGIN#]" class="input"></div>
-</div>
-<div class="form-group">
- <label class="control-label"> Password:</label>
- <div class="col-lg-6"><input type="text" class="form-control" name="password" value="[#PASSWORD#]" class="input"></div>
-</div>
-<div class="form-group">
- <label class="control-label"> Timeout (ms):</label>
- <div class="col-lg-6"><input type="text" class="form-control" name="timeout" value="[#TIMEOUT#]" class="input"></div>
-</div>
-
-
 <div class="form-actions">
 <button type="submit" name="subm" value="Submit" class="btn btn-primary"><#LANG_UPDATE#></button>
 <input type="hidden" name="view_mode" value="update_settings">
@@ -90,6 +87,19 @@
 </div>
 </fieldset>
 </form>
-<div class="pull-left"><a href="?test=1" class="btn btn-default">Test notify</a></div>
 </div>
+ <br>
+
+  [#inc kodi_instances_search_admin.html#]
  [#endif VIEW_MODE#]
+ <!-- / table kodi_instances search -->
+ <!-- table kodi_instances edit -->
+ [#if VIEW_MODE="edit_kodi_instances"#]
+   [#inc kodi_instances_edit.html#]
+ [#endif VIEW_MODE#]
+ <!-- / table kodi_instances edit -->
+ <!-- table kodi_instances view --> 
+ [#if VIEW_MODE="view_kodi_instances"#]
+   [#inc kodi_instances_view.html#]
+ [#endif VIEW_MODE#]
+ <!-- / table kodi_instances view -->

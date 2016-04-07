@@ -1,0 +1,85 @@
+
+<!-- Table 'kodi_instances' edit -->
+<form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
+[#if OK#]
+<div class="alert alert-success"><#LANG_DATA_SAVED#></div>
+[#endif OK#]
+[#if ERR#]
+<div class="alert alert-error"><#LANG_FILLOUT_REQURED#></div>
+[#endif ERR#]
+<fieldset>
+[#if ID=""#]
+<legend><#LANG_NEW_RECORD#></legend>
+[#endif ID#]
+<!-- TITLE (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_TITLE#] style="color:red;font-weight:bold"[#endif#]>
+ <#LANG_TITLE#>:(*)
+ </label>
+ <div class="col-lg-4"><input type="text" class="form-control" name="title" value="[#TITLE#]" id="title"></div>
+</div>
+<!-- ENABLE (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_ENABLE#] style="color:red;font-weight:bold"[#endif#]>
+ Enable:
+ </label>
+ <div class="controls"><input type="checkbox" name="enable" value="1"[#if ENABLE="1"#] checked[#endif#]></div>
+</div>
+<!-- IP (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_IP#] style="color:red;font-weight:bold"[#endif#]>
+ IP:
+ </label>
+ <div class="col-lg-4"><input type="text" class="form-control" name="ip" value="[#IP#]" id="ip"></div>
+</div>
+<!-- PORT (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_PORT#] style="color:red;font-weight:bold"[#endif#]>
+ Port:
+ </label>
+ <div class="col-lg-4"><input type="text" class="form-control" name="port" value="[#PORT#]" id="port"></div>
+</div>
+<!-- LOGIN (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_LOGIN#] style="color:red;font-weight:bold"[#endif#]>
+ Login:
+ </label>
+ <div class="col-lg-4"><input type="text" class="form-control" name="login" value="[#LOGIN#]" id="login"></div>
+</div>
+<!-- PASSWORD (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_PASSWORD#] style="color:red;font-weight:bold"[#endif#]>
+ Password:
+ </label>
+ <div class="col-lg-4"><input type="text" class="form-control" name="password" value="[#PASSWORD#]" id="password"></div>
+</div>
+<!-- DISPLAY_TIME (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_DISPLAY_TIME#] style="color:red;font-weight:bold"[#endif#]>
+ Timeout (ms):
+ </label>
+ <div class="col-lg-4"><input type="text" class="form-control" name="display_time" value="[#DISPLAY_TIME#]" id="display_time"></div>
+</div>
+<!-- LEVEL (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_LEVEL#] style="color:red;font-weight:bold"[#endif#]>
+ Level history:
+ </label>
+ <div class="col-lg-4"><input type="text" class="form-control" name="level" value="[#LEVEL#]" id="level"></div>
+</div>
+<div class="form-group">
+        <div class="col-lg-offset-3 col-lg-4">
+ [#if ID!=""#]
+ <button type="submit" name="subm" value="Submit" class="btn btn-primary"><#LANG_SUBMIT#></button>
+ [#else ID#]
+ <button type="submit" name="subm" value="Add" class="btn btn-primary"><#LANG_ADD#></button>
+ [#endif ID#]
+ <a href="?" class="btn btn-default "><#LANG_CANCEL#></a>
+<input type="hidden" name="id" value="<#ID#>">
+<input type="hidden" name="view_mode" value="<#VIEW_MODE#>">
+<input type="hidden" name="edit_mode" value="<#EDIT_MODE#>">
+<input type="hidden" name="mode" value="update">
+</div>
+</div>
+</fieldset>
+</form>
