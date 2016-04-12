@@ -227,11 +227,7 @@ function usual(&$out) {
     $image = $this->config['IMAGE_PATH'];
     
     $host = $ip.":".$port;
-    if ($login!="")
-    {
-        $host=$login.":".$password."@".$host;
-    }
-    
+
     if(!$timeout)
         $timeout = 3000;
      
@@ -252,10 +248,10 @@ function usual(&$out) {
     //registerError('kodi_notify', $req);
     try
     {
-      $contents = file_get_contents($req);
+      $contents =  getURL($req, 0, $login, $password);
       $obj = json_decode($contents);
       if ($obj->{'result'} != "OK")
-        registerError('kodi_notify', $contents);
+        registerError('kodi_notify',$contents. 'URL='. $req);
     }
     catch (Exception $e)
     {
