@@ -239,7 +239,8 @@ function usual(&$out) {
     $out["params"] = array();
     $out["params"]["title"] = $title;
     $out["params"]["message"] = $message;
-    $out["params"]["image"] = $image;
+    if ($image!= null)
+        $out["params"]["image"] = $image;
     $out["params"]["displaytime"] = (int)$timeout;
     $out["id"] = 1;
     $json = json_encode($out);
@@ -255,7 +256,7 @@ function usual(&$out) {
     }
     catch (Exception $e)
     {
-      registerError('kodi_notify', 'Error send query - '.$req.' == '.get_class($e) . ', ' . $e->getMessage());
+        registerError('kodi_notify', 'Error send query - '.$req.' == '.get_class($e) . ', ' . $e->getMessage());
     }
  } 
 /**
