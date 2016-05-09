@@ -184,7 +184,7 @@ function usual(&$out) {
   SQLExec("DELETE FROM kodi_instances WHERE ID='".$rec['ID']."'");
  }
  
- function processSubscription($event, $details='') {
+ function processSubscription($event, &$details) {
  $this->getConfig();
   if ($event=='SAY') {
     $level=$details['level'];
@@ -267,7 +267,7 @@ function usual(&$out) {
 * @access private
 */
  function install($data='') {
-  subscribeToEvent($this->name, 'SAY');
+  subscribeToEvent($this->name, 'SAY', '', 10);
   parent::install();
  }
 /**
