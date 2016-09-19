@@ -16,7 +16,7 @@
     $ok=0;
    }
    global $enable;
-   $rec['ENABLE']=$enable;
+   $rec['ENABLE']=(int)$enable;
    global $ip;
    $rec['IP']=$ip;
    global $port;
