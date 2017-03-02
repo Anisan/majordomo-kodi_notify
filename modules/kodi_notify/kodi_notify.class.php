@@ -212,7 +212,7 @@ function usual(&$out) {
         $wavurl= BASE_URL .'/cached/voice/'.$filename.'.wav';
         if (!file_exists($cachedFileName.'.wav'))
         {
-            safe_exec('ffmpeg -i "'.$cachedFileName.'.mp3" -acodec pcm_u8 -ar 22050 "'.$cachedFileName.'.wav"');
+            exec('ffmpeg -i "'.$cachedFileName.'.mp3" -acodec pcm_u8 -ar 22050 "'.$cachedFileName.'.wav"');
         }
         $host = $ip.":".$port;
         $url = 'http://'.$host;
@@ -221,15 +221,15 @@ function usual(&$out) {
         $out["method"] = "Addons.ExecuteAddon";
         $out["params"] = array();
         $out["params"]["addonid"] = "script.alicevox.master";
-        $out["params"]["params"] = $wavurl;
+        $out["params"]["params"] = array();
+        $out["params"]["params"][] = $wavurl;
         $out["id"] = 1;
         $json = json_encode($out);
-        $qs = http_build_query(array('request' => $json));
-        $req = $url."/jsonrpc?".$qs;
+        $req = $url."/jsonrpc?request=".$json;
         //registerError('kodi_notify', $req);
         $contents =  getURL($req, 0, $login, $password);
         $obj = json_decode($contents);
-        echo $contents;
+        //echo $contents;
         if ($obj->{'result'} != "OK")
             registerError('kodi_notify',$contents. 'URL='. $req);
     }
@@ -308,7 +308,7 @@ function usual(&$out) {
 * @access private
 */
  function install($data='') {
-  subscribeToEvent($this->name, 'SAY', '', 10);
+  subscribeToEvent($this->name, 'SAY', '', 20);
   parent::install();
  }
 /**
