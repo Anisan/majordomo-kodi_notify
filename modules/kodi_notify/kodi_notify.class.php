@@ -194,9 +194,50 @@ function usual(&$out) {
     $res=SQLSelect($query); 
     foreach ($res as $row) {
         $this->sendNotify($row['IP'],$row['PORT'],$row['LOGIN'],$row['PASSWORD'],$message,$row['DISPLAY_TIME']); 
+        if ($row['SAY']!='no')
+        {
+            $this->sendCommandSay($row['IP'],$row['PORT'],$row['LOGIN'],$row['PASSWORD'],$row['SAY'],$message);
+        } 
     } 
   }
  }
+ 
+ function sendCommandSay($ip,$port,$login,$password,$module,$message)
+ {
+    try
+    {
+        $filename = md5($message) . $module;
+        $cachedVoiceDir = ROOT . 'cached/voice';
+        $cachedFileName = $cachedVoiceDir . '/' . $filename;
+        $wavurl= BASE_URL .'/cached/voice/'.$filename.'.wav';
+        if (!file_exists($cachedFileName.'.wav'))
+        {
+            safe_exec('ffmpeg -i "'.$cachedFileName.'.mp3" -acodec pcm_u8 -ar 22050 "'.$cachedFileName.'.wav"');
+        }
+        $host = $ip.":".$port;
+        $url = 'http://'.$host;
+        $out=array();
+        $out["jsonrpc"] = "2.0";
+        $out["method"] = "Addons.ExecuteAddon";
+        $out["params"] = array();
+        $out["params"]["addonid"] = "script.alicevox.master";
+        $out["params"]["params"] = $wavurl;
+        $out["id"] = 1;
+        $json = json_encode($out);
+        $qs = http_build_query(array('request' => $json));
+        $req = $url."/jsonrpc?".$qs;
+        //registerError('kodi_notify', $req);
+        $contents =  getURL($req, 0, $login, $password);
+        $obj = json_decode($contents);
+        echo $contents;
+        if ($obj->{'result'} != "OK")
+            registerError('kodi_notify',$contents. 'URL='. $req);
+    }
+    catch (Exception $e)
+    {
+        registerError('kodi_notify', 'Error send query - '.$req.' == '.get_class($e) . ', ' . $e->getMessage());
+    }
+ } 
  
  function sendNotifyAll($message)
  {
@@ -279,6 +320,7 @@ function usual(&$out) {
 */
  function uninstall() {
   SQLExec('DROP TABLE IF EXISTS kodi_instances');
+  unsubscribeFromEvent($this->name, 'SAY');
   parent::uninstall();
  }
 /**
@@ -302,6 +344,7 @@ kodi_instances -
  kodi_instances: PASSWORD varchar(255) NOT NULL DEFAULT ''
  kodi_instances: DISPLAY_TIME int(10) NOT NULL DEFAULT '5000'
  kodi_instances: LEVEL int(10) NOT NULL DEFAULT '1'
+ kodi_instances: SAY varchar(255) NOT NULL DEFAULT 'no'
 EOD;
   parent::dbInstall($data);
  }

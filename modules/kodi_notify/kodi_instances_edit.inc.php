@@ -29,7 +29,9 @@
    $rec['DISPLAY_TIME']=$display_time;
    global $level;
    $rec['LEVEL']=$level;
-  //UPDATING RECORD
+   global $say;
+   $rec['SAY']=$say;
+   //UPDATING RECORD
    if ($ok) {
     if ($rec['ID']) {
      SQLUpdate($table_name, $rec); // update
@@ -49,6 +51,7 @@
    $rec['PORT']=8080;
    $rec['DISPLAY_TIME']=5000;
    $rec['LEVEL']=0;
+   $rec['SAY']='no';
   }  
   if (is_array($rec)) {
    foreach($rec as $k=>$v) {

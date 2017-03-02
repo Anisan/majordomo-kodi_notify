@@ -1,4 +1,6 @@
-
+<p align=left>
+    <a class="btn btn-defaul btn-primary" href="?">&lt;&lt;&lt; <#LANG_BACK#></a>
+</p>   
 <!-- Table 'kodi_instances' edit -->
 <form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
 [#if OK#]
@@ -66,6 +68,18 @@
  Level history:
  </label>
  <div class="col-lg-4"><input type="text" class="form-control" name="level" value="[#LEVEL#]" id="level"></div>
+</div>
+<!-- SAY (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_SAY#] style="color:red;font-weight:bold"[#endif#]>
+ Say message on Kodi:
+ </label>
+ <div class="col-lg-4">
+    <select name="say" id="say" class="form-control">
+        <option value="no"[#if SAY="no"#] selected[#endif#]>No</option>
+        <option value="_ivona"[#if SAY="_ivona"#] selected[#endif#]>Ivona</option>
+        <option value="_yandex"[#if SAY="_yandex"#] selected[#endif#]>Yandex</option>
+    </select></div>
 </div>
 <div class="form-group">
         <div class="col-lg-offset-3 col-lg-4">
