@@ -210,6 +210,7 @@ function usual(&$out) {
         $cachedVoiceDir = ROOT . 'cached/voice';
         $cachedFileName = $cachedVoiceDir . '/' . $filename;
         $wavurl= BASE_URL .'/cached/voice/'.$filename.'.wav';
+        if (!file_exists($cachedFileName.'.mp3')) return;
         if (!file_exists($cachedFileName.'.wav'))
         {
             exec('ffmpeg -i "'.$cachedFileName.'.mp3" -acodec pcm_u8 -ar 22050 "'.$cachedFileName.'.wav"');
@@ -228,10 +229,13 @@ function usual(&$out) {
         $req = $url."/jsonrpc?request=".$json;
         //registerError('kodi_notify', $req);
         $contents =  getURL($req, 0, $login, $password);
-        $obj = json_decode($contents);
-        //echo $contents;
-        if ($obj->{'result'} != "OK")
-            registerError('kodi_notify',$contents. 'URL='. $req);
+        if ($contents!="")
+        {
+            $obj = json_decode($contents);
+            //echo $contents;
+            if ($obj->{'result'} != "OK")
+                registerError('kodi_notify',$contents. 'URL='. $req);
+        }
     }
     catch (Exception $e)
     {
@@ -290,10 +294,13 @@ function usual(&$out) {
     //registerError('kodi_notify', $req);
     try
     {
-      $contents =  getURL($req, 0, $login, $password);
-      $obj = json_decode($contents);
-      if ($obj->{'result'} != "OK")
-        registerError('kodi_notify',$contents. 'URL='. $req);
+        $contents =  getURL($req, 0, $login, $password);
+        if ($contents!="")
+        {
+            $obj = json_decode($contents);
+            if ($obj->{'result'} != "OK")
+                registerError('kodi_notify',$contents. 'URL='. $req);
+        }
     }
     catch (Exception $e)
     {
