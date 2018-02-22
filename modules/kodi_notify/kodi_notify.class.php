@@ -131,13 +131,20 @@ function admin(&$out) {
  }
  if ($this->data_source=='kodi_instances' || $this->data_source=='') {
   if ($this->view_mode=='' || $this->view_mode=='search_kodi_instances') {
-   $this->search_kodi_instances($out);
+   $this->search_kodi($out);
   }
   if ($this->view_mode=='edit_kodi_instances') {
    $this->edit_kodi_instances($out, $this->id);
   }
+  if ($this->view_mode=='edit_kodi_titles') {
+   $this->edit_kodi_titles($out, $this->id);
+  }
   if ($this->view_mode=='delete_kodi_instances') {
    $this->delete_kodi_instances($this->id);
+   $this->redirect("?");
+  }
+  if ($this->view_mode=='delete_kodi_titles') {
+   $this->delete_kodi_titles($this->id);
    $this->redirect("?");
   }
  }
@@ -162,8 +169,9 @@ function usual(&$out) {
 *
 * @access public
 */
- function search_kodi_instances(&$out) {
+ function search_kodi(&$out) {
   require(DIR_MODULES.$this->name.'/kodi_instances_search.inc.php');
+  require(DIR_MODULES.$this->name.'/kodi_titles_search.inc.php');
  }
 /**
 * kodi_instances edit/add
@@ -173,15 +181,19 @@ function usual(&$out) {
  function edit_kodi_instances(&$out, $id) {
   require(DIR_MODULES.$this->name.'/kodi_instances_edit.inc.php');
  }
+ function edit_kodi_titles(&$out, $id) {
+  require(DIR_MODULES.$this->name.'/kodi_titles_edit.inc.php');
+ }
 /**
 * kodi_instances delete record
 *
 * @access public
 */
  function delete_kodi_instances($id) {
-  $rec=SQLSelectOne("SELECT * FROM kodi_instances WHERE ID='$id'");
-  // some action for related tables
-  SQLExec("DELETE FROM kodi_instances WHERE ID='".$rec['ID']."'");
+  SQLExec("DELETE FROM kodi_instances WHERE ID='$id'");
+ }
+ function delete_kodi_titles($id) {
+  SQLExec("DELETE FROM kodi_titles WHERE ID='$id'");
  }
  
  function processSubscription($event, &$details) {
@@ -191,9 +203,16 @@ function usual(&$out) {
     $message=$details['message'];
    
     $query = "SELECT * FROM kodi_instances WHERE enable=1 AND level<=".$level;
-    $res=SQLSelect($query); 
+    $res=SQLSelect($query);
+    $title = $this->config['TITLE'];
+    if ($res[0]['ID']) { 
+        $query_titles = "SELECT * FROM kodi_titles WHERE level<=".$level . " ORDER BY level desc";
+        $res_titles=SQLSelect($query_titles);
+        if ($res_titles[0]['ID'])
+            $title = $res_titles[0]['TITLE'];
+    }
     foreach ($res as $row) {
-        $this->sendNotify($row['IP'],$row['PORT'],$row['LOGIN'],$row['PASSWORD'],$message,$row['DISPLAY_TIME']); 
+        $this->sendNotify($row['IP'],$row['PORT'],$row['LOGIN'],$row['PASSWORD'],$title,$message,$row['DISPLAY_TIME']); 
         if ($row['SAY']!='no')
         {
             $this->sendCommandSay($row['IP'],$row['PORT'],$row['LOGIN'],$row['PASSWORD'],$row['SAY'],$message);
@@ -249,24 +268,23 @@ function usual(&$out) {
     $query = "SELECT * FROM kodi_instances";
     $res=SQLSelect($query); 
     foreach ($res as $row) {
-        $this->sendNotify($row['IP'],$row['PORT'],$row['LOGIN'],$row['PASSWORD'],$message,$row['DISPLAY_TIME']); 
+        $this->sendNotify($row['IP'],$row['PORT'],$row['LOGIN'],$row['PASSWORD'],$this->config['TITLE'],$message,$row['DISPLAY_TIME']); 
     } 
  }
  
- function sendNotifByName($name,$message)
+ function sendNotifByName($name,$title,$message)
  {
     $this->getConfig();
     $query = "SELECT * FROM kodi_instances WHERE TITLE='".$name."'";
     $res=SQLSelect($query); 
     foreach ($res as $row) {
-        $this->sendNotify($row['IP'],$row['PORT'],$row['LOGIN'],$row['PASSWORD'],$message,$row['DISPLAY_TIME']); 
+        $this->sendNotify($row['IP'],$row['PORT'],$row['LOGIN'],$row['PASSWORD'],$title,$message,$row['DISPLAY_TIME']); 
     } 
  }
  
      
- function sendNotify($ip,$port,$login,$password,$message,$timeout)
+ function sendNotify($ip,$port,$login,$password,$title,$message,$timeout)
  {
-    $title = $this->config['TITLE'];
     if(!$title)
         $title = "Majordomo";
     $image = $this->config['IMAGE_PATH'];
@@ -352,6 +370,10 @@ kodi_instances -
  kodi_instances: DISPLAY_TIME int(10) NOT NULL DEFAULT '5000'
  kodi_instances: LEVEL int(10) NOT NULL DEFAULT '1'
  kodi_instances: SAY varchar(255) NOT NULL DEFAULT 'no'
+ 
+ kodi_titles: ID int(10) unsigned NOT NULL auto_increment
+ kodi_titles: TITLE varchar(100) NOT NULL DEFAULT ''
+ kodi_titles: LEVEL int(10) NOT NULL DEFAULT '1'
 EOD;
   parent::dbInstall($data);
  }

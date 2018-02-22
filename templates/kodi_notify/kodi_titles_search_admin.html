@@ -2,12 +2,12 @@
 <!-- table kodi_instances search -->
 </br>
 <p>
-<a href="?view_mode=edit_kodi_instances" class="btn btn-default"> <#LANG_ADD#></a>
+<a href="?view_mode=edit_kodi_titles" class="btn btn-default"> <#LANG_ADD#></a>
 </p>
 <table width=100% border=0><tr>
 <td valign=top>
 <!-- results -->
-[#if RESULT#]
+[#if TITLES#]
 <!-- paging -->
 [#if PAGES#]
 <table border=0>
@@ -23,27 +23,17 @@
 [#endif PAGES#]
 <!-- / paging -->
 <!-- search results (list) -->
-<form action="?" method="post" name="frmList_kodi_instances" style="padding:0px" class="form">
+<form action="?" method="post" name="frmList_kodi_titles" style="padding:0px" class="form">
 <table  align=center class="table table-striped">
 <tbody>
-[#begin RESULT#]
+[#begin TITLES#]
 <tr style="height:52px" class="hover_btn2">
-<td>
-  [#if ENABLE==1#]
-   <img src="./img/icons/status/green_32.png">
-  [#else#]
-   <img src="./img/icons/status/red_32.png">
-  [#endif#]
- </td>   
  <td style="vertical-align:middle">
   <b>[#TITLE#]</a></b>
  </td>
  <td style="vertical-align:middle">
-   [#IP#]:[#PORT#]
- </td>
- <td style="vertical-align:middle">
   [#if LEVEL!=""#]
-   Level history:[#LEVEL#]
+   Level history => [#LEVEL#]
   [#else#]
    &nbsp;
   [#endif#]
@@ -51,13 +41,13 @@
  <td style="vertical-align:middle" width="1%" nowrap>
   <div style="width:120px">
   [#if "<#ACTION#>"=="admin"#]
-   <a href="?view_mode=edit_kodi_instances&id=[#ID#]" class="btn btn-default" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-    <a href="?view_mode=delete_kodi_instances&id=[#ID#]" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="Delete"><i class="glyphicon glyphicon-remove"></i></a>
+   <a href="?view_mode=edit_kodi_titles&id=[#ID#]" class="btn btn-default" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+    <a href="?view_mode=delete_kodi_titles&id=[#ID#]" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="Delete"><i class="glyphicon glyphicon-remove"></i></a>
   [#endif ACTION#]
   </div>
  </td>
 </tr>
-[#end RESULT#]
+[#end TITLES#]
 </tbody>
 </table>
 <input type="hidden" name="data_source" value="<#DATA_SOURCE#>">
@@ -78,10 +68,10 @@
 </table>
 [#endif PAGES#]
 <!-- / paging -->
-[#else RESULT#]
+[#else TITLES#]
 <p>
 <font color="red"><#LANG_NO_RECORDS_FOUND#></font>
 </p>
-[#endif RESULT#]
+[#endif TITLES#]
 <!-- / results -->
 </td></tr></table>
