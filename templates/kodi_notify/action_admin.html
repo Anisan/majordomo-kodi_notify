@@ -4,11 +4,6 @@
  <!-- table kodi_instances search -->
  [#if VIEW_MODE="search_kodi_instances" || VIEW_MODE=""#]
 <!-- table zwave_devices search -->
-<div class="float-right">
-	<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#about">About&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span>
-	</button>
-</div>
-
 <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="about1" aria-hidden="true">
 <!-- <div id="about" class="modal hide"> -->
 	<div class="modal-dialog">
@@ -41,12 +36,14 @@
 </div>
 
 <div>
- <a href="https://kodi.tv/" target="_blank">Kodi</a> Notifier<br><br>
- <a class="btn btn-default" href="#" onClick="$('#api_settings').toggle();return false;"><#LANG_SETUP#></a>   
- <a href="?test=1" class="btn btn-default">Test notify</a>
+ <a href="https://kodi.tv/" target="_blank"><img src="../img/modules/kodi_notify.png" width="24" height="24"> Kodi</a> Notifier
+ <a class="btn btn-default" href="#api_settings" data-toggle="collapse"><i class="glyphicon glyphicon-cog"></i> <#LANG_SETUP#></a>   
+ <a href="?test=1" class="btn btn-default"><i class="glyphicon glyphicon-wrench"></i> Test notify</a>
+ <button class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#about">About&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span>
+ </button>
 </div>
 
-<div style="display:none" id='api_settings'>
+<div class="collapse" id='api_settings'>
 &nbsp;
 <form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
 <fieldset>
