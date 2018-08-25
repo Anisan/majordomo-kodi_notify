@@ -307,12 +307,25 @@ function usual(&$out) {
     $out["params"]["displaytime"] = (int)$timeout;
     $out["id"] = 1;
     $json = json_encode($out);
-    $qs = http_build_query(array('request' => $json));
-    $req = $url."/jsonrpc?".$qs;
+    $req = $url."/jsonrpc";
     //registerError('kodi_notify', $req);
     try
     {
-        $contents =  getURL($req, 0, $login, $password);
+        $curl = curl_init($req);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($json))
+        );
+        if ($login!="" && $password!="")
+        {
+            curl_setopt($curl, CURLOPT_USERPWD, "$login:$password");
+            curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        }
+        $contents = curl_exec($curl);
+        curl_close($curl);
         if ($contents!="")
         {
             $obj = json_decode($contents);
